@@ -1,6 +1,7 @@
 import React from "react";
 import "./App.css";
 import PropTypes from "prop-types";
+import styled from "@emotion/styled";
 
 const PokemonRow = ({ pokemon, onSelect }) => (
   <tr>
@@ -36,6 +37,7 @@ const PokemonInfo = ({ name, base }) => (
   </div>
 );
 
+//Ensure that the data received are from PokemonInfo data
 PokemonInfo.propTypes = {
   name: PropTypes.shape({
     english: PropTypes.string.isRequired,
@@ -50,6 +52,30 @@ PokemonInfo.propTypes = {
   }),
 };
 
+//Creation of emotion styled css
+const Title = styled.h1`
+  text-align: center;
+`;
+
+const TwoColunmLayout = styled.div`
+  display: grid;
+  grid-template-columns: 70% 30%;
+  grid-column-gap: 1rem;
+`;
+
+const Container = styled.div`
+  margin: auto;
+  width: 800px;
+  padding-top: 1rem;
+`;
+
+const Input = styled.input`
+  width: 100%;
+  font-size: x-large;
+  padding: 0.2rem;
+`;
+
+//Starting the Application
 function App() {
   const [filter, filterSet] = React.useState("");
   const [pokemon, pokemonSet] = React.useState([]);
@@ -61,22 +87,10 @@ function App() {
   }, []);
 
   return (
-    <div
-      style={{
-        margin: "auto",
-        width: 800,
-        paddingTop: "1rem",
-      }}
-    >
-      <h1 className="title"> Pokemon Search</h1>
-      <input value={filter} onChange={(evt) => filterSet(evt.target.value)} />
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "70% 30%",
-          gridColumnGap: "1rem",
-        }}
-      >
+    <Container>
+      <Title className="title"> Pokemon Search</Title>
+      <Input value={filter} onChange={(evt) => filterSet(evt.target.value)} />
+      <TwoColunmLayout>
         <div>
           <table width="100%">
             <thead>
@@ -103,8 +117,8 @@ function App() {
           </table>
         </div>
         {selectedItem && <PokemonInfo {...selectedItem} />}
-      </div>
-    </div>
+      </TwoColunmLayout>
+    </Container>
   );
 }
 
