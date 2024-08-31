@@ -22,7 +22,7 @@ const pokemonReducer = (state, action) => {
         ...state,
         pokemon: action.payload,
       };
-    case "c":
+    case "SET_SELECTED_POKEMON":
       return {
         ...state,
         selectedPokemon: action.payload,
