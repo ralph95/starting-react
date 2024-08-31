@@ -3,7 +3,11 @@ import PokemonRow from "./PokemonRow";
 import PokemonContext from "../PokemonContext";
 
 const PokemonTable = () => {
-  const { pokemon, filter, selectedPokemonSet } = useContext(PokemonContext);
+  const {
+    state: { pokemon, filter },
+    dispatch,
+  } = React.useContext(PokemonContext);
+
   return (
     <table width="100%">
       <thead>
@@ -14,14 +18,16 @@ const PokemonTable = () => {
       </thead>
       <tbody>
         {pokemon
-          .filter((pokemon) =>
-            pokemon.name.english.toLowerCase().includes(filter.toLowerCase())
+          .filter((p) =>
+            p.name.english.toLowerCase().includes(filter.toLowerCase())
           )
-          .map((pokemon) => (
+          .map((p) => (
             <PokemonRow
-              pokemon={pokemon}
-              key={[pokemon.id]}
-              onSelect={(pokemon) => selectedPokemonSet(pokemon)}
+              pokemon={p}
+              key={p.id} // Use p.id directly as the key
+              onSelect={() =>
+                dispatch({ type: "SET_SELECTED_POKEMON", payload: p })
+              }
             />
           ))}
       </tbody>
