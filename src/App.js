@@ -3,14 +3,23 @@ import "./App.css";
 import PropTypes from "prop-types";
 import styled from "@emotion/styled";
 import { Button } from "@mui/material";
+import { configureStore } from "@reduxjs/toolkit";
+import { Provider, useSelector, useDispatch } from "react-redux";
 
 import PokemonType from "./PokemonType";
 import PokemonTable from "./components/PokemonTable";
 import PokemonInfo from "./components/PokemonInfo";
 import PokemonFilter from "./components/PokemonFilter";
-import PokemonContext from "./PokemonContext";
 
-const pokemonReducer = (state, action) => {
+// Reducer function
+const pokemonReducer = (
+  state = {
+    pokemon: [],
+    filter: "",
+    selectedPokemon: null,
+  },
+  action
+) => {
   switch (action.type) {
     case "SET_FILTER":
       return {
@@ -28,11 +37,16 @@ const pokemonReducer = (state, action) => {
         selectedPokemon: action.payload,
       };
     default:
-      throw new Error("No Action");
+      return state;
   }
 };
 
-//Ensure that the data received are from PokemonInfo data
+// Correctly configure the store
+const store = configureStore({
+  reducer: pokemonReducer,
+});
+
+// Ensure that the data received are from PokemonInfo data
 PokemonInfo.propTypes = {
   name: PropTypes.shape({
     english: PropTypes.string.isRequired,
@@ -47,7 +61,7 @@ PokemonInfo.propTypes = {
   }),
 };
 
-//Creation of emotion styled css
+// Creation of emotion styled css
 const Title = styled.h1`
   text-align: center;
 `;
@@ -64,42 +78,38 @@ const Container = styled.div`
   padding-top: 1rem;
 `;
 
-//Starting the Application
+// Starting the Application
 function App() {
-  const [state, dispatch] = React.useReducer(pokemonReducer, {
-    pokemon: [],
-    filter: "",
-    selectedPokemon: null,
-  });
+  const dispatch = useDispatch();
+  const pokemon = useSelector((state) => state.pokemon);
+
   React.useEffect(() => {
     fetch("http://localhost:3000/starting-react/pokemon.json")
       .then((resp) => resp.json())
       .then((data) => dispatch({ type: "SET_POKEMON", payload: data }));
-  }, []);
+  }, [dispatch]);
 
-  if (!state.pokemon) {
+  if (!pokemon) {
     return <div>Loading data</div>;
   }
 
   return (
-    <PokemonContext.Provider
-      value={{
-        state,
-        dispatch,
-      }}
-    >
-      <Container>
-        <Title className="title"> Pokemon Search</Title>
-        <TwoColunmLayout>
-          <div>
-            <PokemonFilter />
-            <PokemonTable />
-          </div>
-          {<PokemonInfo />}
-        </TwoColunmLayout>
-      </Container>
-    </PokemonContext.Provider>
+    <Container>
+      <Title className="title"> Pokemon Search</Title>
+      <TwoColunmLayout>
+        <div>
+          <PokemonFilter />
+          <PokemonTable />
+        </div>
+        <PokemonInfo />
+      </TwoColunmLayout>
+    </Container>
   );
 }
 
-export default App;
+// Wrapping the App with Provider
+export default () => (
+  <Provider store={store}>
+    <App />
+  </Provider>
+);
