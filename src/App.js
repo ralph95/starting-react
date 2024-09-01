@@ -13,7 +13,7 @@ import PokemonContext from "./PokemonContext";
 const pokemonReducer = (state, action) => {
   switch (action.type) {
     case "SET_FILTER":
-      return {0
+      return {
         ...state,
         filter: action.payload,
       };
