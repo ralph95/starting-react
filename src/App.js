@@ -2,7 +2,7 @@ import React from "react";
 import "./App.css";
 import PropTypes from "prop-types";
 import styled from "@emotion/styled";
-import { Button } from "@material-ui/core";
+import { Button } from "@mui/material";
 
 import PokemonType from "./PokemonType";
 import PokemonTable from "./components/PokemonTable";
@@ -13,7 +13,7 @@ import PokemonContext from "./PokemonContext";
 const pokemonReducer = (state, action) => {
   switch (action.type) {
     case "SET_FILTER":
-      return {
+      return {0
         ...state,
         filter: action.payload,
       };
