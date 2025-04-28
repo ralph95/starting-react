@@ -5,7 +5,7 @@ pipeline{
             steps{
                 echo 'executing yarn...'
                 nodejs('Node-23.11.0'){
-                    sh 'yarn start'
+                    sh 'yarn install'
                 }
             }
         }
