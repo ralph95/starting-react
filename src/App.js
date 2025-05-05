@@ -84,7 +84,7 @@ function App() {
   const pokemon = useSelector((state) => state.pokemon);
 
   React.useEffect(() => {
-    fetch("http://localhost:3000/starting-react/pokemon.json")
+    fetch("http://localhost:3000/pokemon.json")
       .then((resp) => resp.json())
       .then((data) => dispatch({ type: "SET_POKEMON", payload: data }));
   }, [dispatch]);
